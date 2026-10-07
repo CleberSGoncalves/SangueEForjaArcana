@@ -1,5 +1,5 @@
 /* ==========================================================
-   src/style.css - Estilo Gótico & Dark Fantasy para Sangue e Forja Arcana
+   src/style.css - Estilo Gótico & Dark Fantasy 100% DIABLO
    ========================================================== */
 
 :root {
@@ -9,6 +9,8 @@
   --blood-red: #ff1744;
   --blood-dark: #8b0000;
   --gold-accent: #ffd700;
+  --gold-dark: #b8860b;
+  --iron-frame: #292524;
   --cyan-neon: #00f5ff;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
@@ -20,7 +22,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Cinzel', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  font-family: 'Cinzel', 'Georgia', serif;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -41,7 +43,7 @@ body, html {
 }
 
 /* ==========================================================
-   HUB DA FORJA SAGRADA
+   HUB DA FORJA SAGRADA (SANTUÁRIO GÓTICO)
    ========================================================== */
 .hub-wrapper {
   width: 100%;
@@ -162,7 +164,6 @@ body, html {
   box-shadow: 0 0 12px rgba(255, 23, 68, 0.3);
 }
 
-/* Painel de Conteúdo das Abas */
 .hub-main-panel {
   flex: 1;
   padding: 24px 28px;
@@ -211,7 +212,6 @@ body, html {
   padding: 20px;
   cursor: pointer;
   transition: all 0.25s;
-  position: relative;
 }
 
 .zone-card:hover {
@@ -313,183 +313,187 @@ body, html {
   box-shadow: 0 6px 25px rgba(220, 38, 38, 0.6);
 }
 
-/* HERÓIS & TALENTOS */
-.heroes-list {
+/* ==========================================================
+   ESTILOS GÓTICOS DAS ABAS DO HUB (DIABLO ARPG)
+   ========================================================== */
+
+/* --- 1. HERÓIS & TALENTOS --- */
+.diablo-heroes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 20px;
+  margin-bottom: 28px;
 }
 
-.hero-card {
-  background: var(--bg-card);
-  border: 2px solid rgba(255, 255, 255, 0.08);
+.diablo-hero-card {
+  background: radial-gradient(circle at top, #1e0f17 0%, #0e060d 100%);
+  border: 2px solid var(--border-gothic);
   border-radius: 12px;
-  overflow: hidden;
-  position: relative;
+  padding: 20px;
+  transition: all 0.25s;
   display: flex;
   flex-direction: column;
 }
 
-.hero-card.selected {
-  border-color: var(--cyan-neon);
-  box-shadow: 0 0 20px rgba(0, 245, 255, 0.25);
+.diablo-hero-card:hover {
+  border-color: #ffd700;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.2);
 }
 
-.hero-color-strip {
-  height: 6px;
-  width: 100%;
+.diablo-hero-card.selected {
+  border-color: #ffd700;
+  background: radial-gradient(circle at top, #2b1320 0%, #130711 100%);
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.35);
 }
 
-.hero-info {
-  padding: 18px;
+.hero-card-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border-gothic);
+  padding-bottom: 12px;
+}
+
+.hero-avatar-icon {
+  font-size: 32px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-gothic);
 }
 
 .hero-title {
   font-size: 12px;
-  color: #fbbf24;
-  display: block;
-  margin-bottom: 10px;
+  color: #ffd700;
+  font-weight: 700;
 }
 
-.hero-desc {
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.5;
+.hero-skills-preview {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   margin-bottom: 14px;
 }
 
 .hero-stats-mini {
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px 14px;
   font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: #cbd5e1;
-}
-
-.btn-select-hero,
-.btn-unlock-hero {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
   font-weight: 800;
-  font-size: 13px;
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s;
-}
-
-.btn-select-hero {
-  background: #3b82f6;
-  color: #ffffff;
-}
-
-.btn-unlock-hero {
-  background: #dc2626;
-  color: #ffffff;
+  color: #ffd700;
+  margin-bottom: 16px;
 }
 
 .badge-active {
-  display: block;
-  text-align: center;
+  display: inline-block;
+  background: linear-gradient(135deg, #78350f 0%, #451a03 100%);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  font-weight: 900;
   font-size: 12px;
-  font-weight: 800;
-  color: #00f5ff;
-  padding: 8px;
-  border: 1px solid #00f5ff;
+  padding: 8px 16px;
   border-radius: 6px;
+  letter-spacing: 1px;
 }
 
-/* Árvore de Talentos */
-.talent-panel {
-  background: var(--bg-card);
-  border: 1px solid var(--border-crimson);
+.diablo-talent-panel {
+  background: radial-gradient(circle at top, #180a13 0%, #0c0409 100%);
+  border: 2px solid var(--border-gothic);
   border-radius: 12px;
-  padding: 20px;
+  padding: 24px;
+  margin-top: 24px;
 }
 
 .talent-tier-box {
-  margin-bottom: 16px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-gothic);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 14px;
 }
 
 .talent-tier-box h4 {
   font-size: 14px;
-  color: #fbbf24;
-  margin-bottom: 10px;
+  color: #ffd700;
+  margin-bottom: 12px;
 }
 
 .talent-options-row {
-  display: flex;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
 }
 
 .talent-opt-btn {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(20, 10, 16, 0.8);
+  border: 1px solid var(--border-gothic);
+  border-radius: 6px;
   padding: 12px;
-  border-radius: 8px;
   text-align: left;
   cursor: pointer;
-  color: #e2e8f0;
   transition: all 0.2s;
+  color: #e2e8f0;
 }
 
 .talent-opt-btn:hover {
-  border-color: #f87171;
+  border-color: #ffd700;
+  background: rgba(40, 20, 32, 0.9);
 }
 
 .talent-opt-btn.chosen {
-  background: rgba(220, 38, 38, 0.2);
-  border-color: #ef4444;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+  border-color: #ffd700;
+  background: linear-gradient(135deg, #451a03 0%, #290d00 100%);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
 
 .talent-opt-btn strong {
   display: block;
-  font-size: 14px;
+  font-size: 13px;
+  color: #ffd700;
   margin-bottom: 4px;
 }
 
 .talent-opt-btn small {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.3;
 }
 
-/* FORJA & ITENS */
+/* --- 2. FORJA SAGRADA & EQUIPAMENTOS --- */
 .forge-actions-bar {
   display: flex;
-  gap: 14px;
+  gap: 16px;
+  flex-wrap: wrap;
   margin-bottom: 24px;
 }
 
 .btn-craft {
-  background: linear-gradient(135deg, #b45309 0%, #78350f 100%);
-  border: 1px solid #f59e0b;
-  color: #ffffff;
-  font-weight: 800;
-  padding: 12px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
+  flex: 1;
+  min-width: 240px;
 }
 
-.btn-craft:hover {
-  transform: scale(1.02);
-}
-
-.equipped-grid,
-.inv-container {
+.equipped-grid {
+  background: radial-gradient(circle at top, #1a0c14 0%, #0a0408 100%);
+  border: 2px solid var(--border-gothic);
+  border-radius: 12px;
+  padding: 20px;
   margin-bottom: 24px;
 }
 
-.equipped-grid h3,
-.inv-container h3,
-.runes-inventory h3 {
+.equipped-grid h3 {
   font-size: 16px;
-  color: #f1f5f9;
-  margin-bottom: 12px;
+  color: #ffd700;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
 }
 
 .slots-row {
@@ -499,33 +503,50 @@ body, html {
 }
 
 .slot-box {
-  background: var(--bg-card);
-  border: 2px dashed rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--border-gothic);
+  border-radius: 8px;
   padding: 14px;
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
   gap: 6px;
 }
 
+.slot-type {
+  font-size: 11px;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
 .item-icon {
-  font-size: 26px;
+  font-size: 28px;
+  margin: 4px 0;
 }
 
 .item-title {
   font-size: 13px;
+  font-weight: 800;
 }
 
 .item-rarity {
   font-size: 11px;
-  color: var(--text-muted);
+  color: #fbbf24;
+}
+
+.slot-empty {
+  font-size: 13px;
+  color: #64748b;
+  font-style: italic;
+  padding: 16px 0;
 }
 
 .btn-unequip {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
+  background: transparent;
+  border: 1px solid #78716c;
   color: #cbd5e1;
   font-size: 11px;
   padding: 4px 10px;
@@ -534,254 +555,278 @@ body, html {
   margin-top: 6px;
 }
 
+.btn-unequip:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.inv-container {
+  background: radial-gradient(circle at top, #1a0c14 0%, #0a0408 100%);
+  border: 2px solid var(--border-gothic);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.inv-container h3 {
+  font-size: 16px;
+  color: #ffd700;
+  margin-bottom: 16px;
+}
+
 .inv-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 14px;
-}
-
-.inv-card {
-  background: var(--bg-card);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.inv-card-header {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.inv-card-header strong {
-  font-size: 13px;
-  display: block;
-}
-
-.inv-card-header small {
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-.item-desc {
-  font-size: 12px;
-  color: #94a3b8;
-  margin-bottom: 12px;
-}
-
-.inv-card-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.btn-equip {
-  flex: 1;
-  background: #2563eb;
-  border: none;
-  color: #ffffff;
-  padding: 6px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.btn-dismantle {
-  flex: 1;
-  background: rgba(220, 38, 38, 0.2);
-  border: 1px solid #ef4444;
-  color: #fca5a5;
-  padding: 6px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* RUNAS */
-.runes-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 14px;
-}
-
-.rune-card {
-  background: var(--bg-card);
-  border: 2px solid;
-  border-radius: 10px;
-  padding: 14px;
-  text-align: center;
-}
-
-.rune-icon {
-  font-size: 28px;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.rune-qty {
-  display: block;
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
-
-.rune-bonus {
-  font-size: 12px;
-  color: #cbd5e1;
-}
-
-/* BESTIÁRIO */
-.bestiary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
 }
 
-.bestiary-card {
-  background: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.diablo-item-card {
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--border-gothic);
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.diablo-item-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
+}
+
+.inv-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.inv-card-header strong {
+  display: block;
+  font-size: 14px;
+}
+
+.inv-card-header small {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.item-desc {
+  font-size: 12px;
+  color: #cbd5e1;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.inv-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.btn-equip {
+  flex: 1;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.btn-dismantle {
+  background: rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(220, 38, 38, 0.5);
+  color: #fca5a5;
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-dismantle:hover {
+  background: rgba(220, 38, 38, 0.35);
+  border-color: #ef4444;
+}
+
+/* --- 3. RUNAS & GEMAS --- */
+.runes-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.diablo-rune-card {
+  background: radial-gradient(circle at top, #160a1e 0%, #08030c 100%);
+  border: 2px solid var(--border-gothic);
   border-radius: 10px;
-  padding: 16px;
+  padding: 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.diablo-rune-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.25);
+}
+
+.rune-icon {
+  font-size: 32px;
+}
+
+.rune-qty {
+  font-size: 11px;
+  font-weight: 800;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.15);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.rune-bonus {
+  font-size: 12px;
+  color: #cbd5e1;
+  line-height: 1.4;
+}
+
+/* --- 4. BESTIÁRIO DO ABISMO (LORE DIABLO) --- */
+.bestiary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 18px;
+}
+
+.diablo-bestiary-card {
+  background: radial-gradient(circle at top, #1e0d16 0%, #0d040a 100%);
+  border: 2px solid var(--border-gothic);
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.25s;
+}
+
+.diablo-bestiary-card:hover {
+  border-color: #ff1744;
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(255, 23, 68, 0.25);
 }
 
 .bestiary-card-header {
   display: flex;
-  gap: 12px;
   align-items: center;
-  margin-bottom: 10px;
+  gap: 12px;
+  border-bottom: 1px solid var(--border-gothic);
+  padding-bottom: 10px;
 }
 
 .bestiary-icon {
   font-size: 32px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-gothic);
 }
 
 .bestiary-card-header h3 {
-  font-size: 15px;
+  font-size: 16px;
+  color: #ffd700;
   margin-bottom: 2px;
 }
 
 .bestiary-cat {
   font-size: 11px;
-  color: #ef4444;
-  font-weight: 700;
+  color: #ff4d6d;
+  font-weight: 800;
 }
 
 .bestiary-lore {
   font-size: 12px;
-  color: var(--text-muted);
+  color: #cbd5e1;
   line-height: 1.5;
-  margin-bottom: 12px;
+  font-style: italic;
+  flex: 1;
 }
 
 .bestiary-stats {
-  font-size: 12px;
-  color: #cbd5e1;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 11px;
+  color: #94a3b8;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-/* GUILDAS */
+.bestiary-stats strong {
+  color: #ffd700;
+}
+
+.kills-count {
+  color: #ef4444;
+  font-weight: 800;
+}
+
+/* --- 5. ORDENS SAGRADAS & GUILDAS --- */
 .guilds-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 18px;
 }
 
-.guild-card {
-  background: var(--bg-card);
-  border: 2px solid;
-  border-radius: 12px;
+.diablo-guild-card {
+  background: radial-gradient(circle at top, #1a0c16 0%, #0a0409 100%);
+  border: 2px solid var(--border-gothic);
+  border-radius: 10px;
   padding: 20px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.25s;
+}
+
+.diablo-guild-card.active-guild {
+  border-color: #ffd700;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.35);
 }
 
 .guild-banner {
   font-size: 36px;
-  margin-bottom: 8px;
+  text-align: center;
+  margin-bottom: 6px;
 }
 
 .guild-motto {
-  display: block;
   font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 14px;
+  color: #fbbf24;
+  text-align: center;
+  margin-bottom: 6px;
 }
 
 .guild-perk {
-  background: rgba(0, 0, 0, 0.4);
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 13px;
-  margin-bottom: 16px;
-}
-
-.btn-join-guild {
-  background: #3b82f6;
-  border: none;
-  color: #ffffff;
-  font-weight: 800;
-  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-gothic);
   border-radius: 6px;
-  cursor: pointer;
-}
-
-.badge-guild-member {
-  font-size: 13px;
-  font-weight: 800;
-  color: #34d399;
-}
-
-/* CONQUISTAS */
-.achievements-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 14px;
-}
-
-.ach-card {
-  background: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 14px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.ach-card.completed {
-  border-color: #f59e0b;
-  background: rgba(245, 158, 11, 0.06);
-}
-
-.ach-icon {
-  font-size: 28px;
-}
-
-.ach-info h4 {
-  font-size: 14px;
-  margin-bottom: 2px;
-}
-
-.ach-info p {
+  padding: 10px 12px;
   font-size: 12px;
-  color: var(--text-muted);
+  color: #cbd5e1;
+  flex: 1;
 }
 
-.ach-reward {
-  font-size: 11px;
-  color: #ff4d6d;
-  font-weight: 700;
+.guild-perk strong {
+  color: #ffd700;
+  display: block;
+  margin-bottom: 4px;
 }
 
 /* ==========================================================
-   HUD EM JOGO (GAMEPLAY)
+   O LENDÁRIO HUD DO DIABLO (HEALTH GLOBE + ACTION BAR)
    ========================================================== */
-.game-hud-overlay {
+.diablo-hud-container {
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -789,221 +834,210 @@ body, html {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 16px 20px;
 }
 
-.hud-top {
+/* Topo: Pergaminho Entalhado */
+.diablo-top-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  position: relative;
   pointer-events: auto;
 }
 
-.hud-hero-health {
-  width: 220px;
-}
-
-.health-bar-frame {
-  height: 22px;
-  background: rgba(0, 0, 0, 0.8);
-  border: 2px solid #ef4444;
-  border-radius: 11px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
-}
-
-.health-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #b91c1c 0%, #ef4444 50%, #f87171 100%);
-  transition: width 0.15s ease-out;
-}
-
-.health-bar-text {
-  position: absolute;
-  inset: 0;
+.diablo-wave-banner {
+  background: linear-gradient(180deg, #2a1b14 0%, #150d0a 100%);
+  border: 2px solid var(--gold-dark);
+  border-radius: 8px;
+  padding: 8px 24px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 11px;
+  gap: 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.banner-skull {
+  font-size: 18px;
+}
+
+.banner-wave-text {
+  font-size: 14px;
   font-weight: 900;
-  color: #ffffff;
-  text-shadow: 0 1px 3px #000000;
+  color: #ffd700;
+  letter-spacing: 2px;
 }
 
-.hud-wave-center {
-  text-align: center;
-  background: rgba(10, 4, 15, 0.85);
-  padding: 6px 18px;
-  border-radius: 8px;
-  border: 1px solid var(--border-crimson);
-}
-
-.hud-wave-title {
-  font-size: 13px;
-  font-weight: 900;
-  color: #ff4d6d;
-  letter-spacing: 1.5px;
-}
-
-.hud-wave-timer {
+.banner-timer-text {
   font-size: 16px;
   font-weight: 800;
   color: #ffffff;
 }
 
-.hud-resources-top {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.hud-blood-badge {
-  background: rgba(239, 68, 68, 0.2);
-  border: 1px solid #ef4444;
+.btn-diablo-pause {
+  position: absolute;
+  right: 24px;
+  top: 14px;
+  background: rgba(20, 10, 10, 0.85);
+  border: 2px solid var(--gold-dark);
+  border-radius: 6px;
+  font-size: 18px;
   padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 800;
-  color: #fca5a5;
-}
-
-.btn-inrun-forge {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  border: 1px solid #fbbf24;
-  color: #ffffff;
-  font-weight: 900;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 13px;
   cursor: pointer;
-  pointer-events: auto;
-  box-shadow: 0 0 14px rgba(245, 158, 11, 0.5);
-  animation: pulseForge 2s infinite;
+  color: #ffd700;
 }
 
-.btn-hud-pause {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  font-size: 15px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  pointer-events: auto;
-  transition: all 0.2s;
-}
-
-.btn-hud-pause:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: #00f5ff;
-}
-
-@keyframes pulseForge {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-/* Barra do Chefe */
-.hud-boss-bar-wrapper {
+/* Barra de Chefe Estilo Diablo */
+.diablo-boss-bar-wrap {
   position: absolute;
   top: 70px;
   left: 50%;
   transform: translateX(-50%);
-  width: 480px;
+  width: 540px;
   max-width: 90%;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   pointer-events: none;
 }
 
-.boss-bar-title {
-  font-size: 13px;
-  font-weight: 900;
-  color: #ff0055;
-  letter-spacing: 2px;
-  margin-bottom: 4px;
-  text-shadow: 0 0 8px #ff0055;
+.boss-bar-gargoyle-l,
+.boss-bar-gargoyle-r {
+  font-size: 26px;
+  filter: drop-shadow(0 0 8px #ff0055);
 }
 
-.boss-bar-frame {
-  height: 16px;
-  background: rgba(0, 0, 0, 0.85);
-  border: 2px solid #ff0055;
-  border-radius: 8px;
+.boss-bar-inner {
+  flex: 1;
+  text-align: center;
+}
+
+.boss-bar-name {
+  font-size: 14px;
+  font-weight: 900;
+  color: #ff1744;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px #ff0055;
+  margin-bottom: 4px;
+}
+
+.boss-bar-track {
+  height: 18px;
+  background: #11080a;
+  border: 2px solid var(--gold-dark);
+  border-radius: 9px;
   overflow: hidden;
+  box-shadow: inset 0 0 8px #000000;
 }
 
 .boss-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #990022 0%, #ff0055 100%);
+  background: linear-gradient(90deg, #880015 0%, #ff1744 60%, #ff4d6d 100%);
   transition: width 0.15s ease-out;
 }
 
-/* Virtual Joystick para Mobile / Touch */
-.hud-joystick-zone {
-  position: absolute;
-  bottom: 24px;
-  left: 24px;
-  width: 130px;
-  height: 130px;
-  pointer-events: auto;
-  user-select: none;
-  touch-action: none;
+/* Rodapé: O Health Globe e Action Bar do Diablo */
+.diablo-bottom-bar {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 920;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 20px 14px 20px;
+  pointer-events: auto;
 }
 
-.joystick-base {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: rgba(14, 6, 21, 0.55);
-  border: 2px solid rgba(0, 245, 255, 0.35);
-  box-shadow: 0 0 15px rgba(0, 245, 255, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* O LENDÁRIO GLOBO DE VIDRO (HEALTH & RESOURCE GLOBE) */
+.diablo-globe-container {
+  width: 110px;
+  height: 110px;
   position: relative;
-}
-
-.joystick-stick {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #00f5ff 0%, #0284c7 100%);
-  box-shadow: 0 0 12px rgba(0, 245, 255, 0.7);
-  position: absolute;
-  transform: translate(0px, 0px);
-  pointer-events: none;
-  transition: transform 0.04s ease-out;
-}
-
-@media (hover: hover) and (pointer: fine) and (min-width: 1025px) {
-  .hud-joystick-zone {
-    opacity: 0.35;
-    transition: opacity 0.2s;
-  }
-  .hud-joystick-zone:hover {
-    opacity: 0.85;
-  }
-}
-
-/* Habilidades Inferiores */
-.hud-skills-bottom {
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 16px;
-  pointer-events: auto;
 }
 
-.skill-btn {
+.globe-ornament-angel,
+.globe-ornament-demon {
+  position: absolute;
+  top: -12px;
+  font-size: 22px;
+  z-index: 5;
+  filter: drop-shadow(0 2px 4px #000);
+}
+
+.globe-glass {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 4px solid var(--gold-dark);
+  background: radial-gradient(circle at 50% 50%, #150005 0%, #050002 100%);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Líquido de Sangue Borbulhante */
+.globe-liquid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: height 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.health-liquid {
+  background: linear-gradient(180deg, #ff2a55 0%, #b71c1c 45%, #4a000d 100%);
+  box-shadow: 0 0 15px rgba(255, 42, 85, 0.8);
+}
+
+.blood-liquid {
+  background: linear-gradient(180deg, #9333ea 0%, #6b21a8 50%, #3b0764 100%);
+  box-shadow: 0 0 15px rgba(147, 51, 234, 0.8);
+}
+
+.globe-highlight {
+  position: absolute;
+  top: 4px;
+  left: 12px;
+  right: 12px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.5) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.globe-text {
+  position: relative;
+  z-index: 10;
+  font-size: 13px;
+  font-weight: 900;
+  color: #ffd700;
+  text-shadow: 0 2px 6px #000000, 0 0 8px #000000;
+  text-align: center;
+}
+
+/* A BARRA CENTRAL DE AÇÕES (ACTION BAR) */
+.diablo-action-bar-frame {
+  background: linear-gradient(180deg, #241c18 0%, #120e0b 100%);
+  border: 3px solid var(--gold-dark);
+  border-radius: 12px;
+  padding: 8px 14px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.95), inset 0 0 12px rgba(0, 0, 0, 0.8);
+}
+
+.action-slot-group {
+  display: flex;
+  gap: 10px;
+}
+
+.diablo-action-slot {
   width: 58px;
   height: 58px;
-  background: rgba(14, 6, 21, 0.9);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
+  background: #181210;
+  border: 2px solid #574438;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1014,29 +1048,62 @@ body, html {
   transition: all 0.15s;
 }
 
-.skill-btn:active {
-  transform: scale(0.94);
-}
-
-.skill-btn.ult-btn {
+.diablo-action-slot:hover {
   border-color: #ffd700;
-  box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
 }
 
-.skill-key {
+.diablo-action-slot:active {
+  transform: translateY(1px);
+}
+
+.diablo-action-slot.ult-slot {
+  border-color: #ffd700;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.diablo-action-slot.forge-slot {
+  border-color: #ff4500;
+  background: linear-gradient(180deg, #2b1208 0%, #150904 100%);
+  box-shadow: 0 0 12px rgba(255, 69, 0, 0.4);
+  animation: pulseForgeDiablo 2s infinite;
+}
+
+@keyframes pulseForgeDiablo {
+  0%, 100% { border-color: #ff4500; }
+  50% { border-color: #ffd700; }
+}
+
+.slot-key {
   position: absolute;
   top: 2px;
   left: 4px;
   font-size: 9px;
   font-weight: 900;
-  color: var(--text-muted);
+  color: var(--gold-accent);
 }
 
-.skill-icon {
-  font-size: 20px;
+.slot-icon {
+  font-size: 22px;
 }
 
-.skill-cd {
+.slot-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-size: 10px;
+  font-weight: 900;
+  color: #34d399;
+}
+
+.slot-label {
+  font-size: 9px;
+  font-weight: 900;
+  color: #ffd700;
+}
+
+.slot-cd {
   position: absolute;
   font-size: 14px;
   font-weight: 900;
@@ -1044,496 +1111,342 @@ body, html {
 }
 
 /* ==========================================================
-   MODAIS: FORJA EM TEMPO REAL, REVIVE & GAME OVER
+   MODAIS GÓTICOS ESTILO DIABLO
    ========================================================== */
-.inrun-forge-modal-overlay,
-.revive-modal-overlay,
-.gameover-modal-overlay {
+.diablo-modal {
   position: fixed;
   inset: 0;
-  background: rgba(3, 1, 6, 0.85);
-  backdrop-filter: blur(8px);
-  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  background: rgba(3, 1, 6, 0.88);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  padding: 16px;
+  animation: fadeInModal 0.3s ease-out;
 }
 
-.inrun-forge-box,
-.revive-box,
-.gameover-box,
-.pause-box {
-  background: radial-gradient(circle at center, #1b0c26 0%, #0d0615 100%);
-  border: 2px solid var(--border-crimson);
-  border-radius: 16px;
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.diablo-forge-box,
+.diablo-revive-box,
+.diablo-gameover-box,
+.diablo-victory-box,
+.diablo-pause-box {
+  background: radial-gradient(circle at center, #1e1119 0%, #0c060d 100%);
+  border: 3px solid var(--gold-dark);
+  border-radius: 14px;
   padding: 30px;
-  max-width: 640px;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0 0 45px rgba(220, 38, 38, 0.35);
+  max-width: 650px;
+  width: 90%;
   max-height: 90vh;
   overflow-y: auto;
-}
-
-/* PAUSE MODAL ESPECÍFICO */
-.pause-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(3, 1, 6, 0.85);
-  backdrop-filter: blur(8px);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.pause-box {
-  border-color: var(--cyan-neon);
-  box-shadow: 0 0 45px rgba(0, 245, 255, 0.3);
-  max-width: 460px;
-}
-
-.pause-box h2 {
-  font-size: 22px;
-  color: var(--cyan-neon);
-  margin-bottom: 8px;
-}
-
-.pause-box p {
-  font-size: 14px;
-  color: var(--text-muted);
-  margin-bottom: 22px;
-}
-
-.pause-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.btn-pause-resume {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  border: 1px solid #38bdf8;
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 800;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-pause-resume:hover {
-  transform: scale(1.02);
-}
-
-.btn-pause-mute {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #e2e8f0;
-  font-size: 14px;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.btn-pause-quit {
-  background: transparent;
-  border: 1px solid #ef4444;
-  color: #fca5a5;
-  font-size: 13px;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.95), inset 0 0 25px rgba(0, 0, 0, 0.8);
 }
 
 .forge-box-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  border-bottom: 2px solid var(--border-gothic);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
 }
 
 .forge-box-header h2 {
   font-size: 20px;
-  color: #ff4500;
+  color: #ffd700;
+  letter-spacing: 1px;
 }
 
 .forge-avail-blood {
   font-size: 14px;
   font-weight: 800;
-  color: #ff758c;
+  color: #ff2a55;
+  background: rgba(255, 42, 85, 0.15);
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 42, 85, 0.4);
 }
 
 .forge-subtitle {
   font-size: 13px;
-  color: var(--text-muted);
+  color: #d6d3d1;
   margin-bottom: 20px;
 }
 
 .forge-cards-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  display: flex;
   gap: 14px;
+  justify-content: center;
   margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
 .forge-recipe-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex: 1;
+  min-width: 170px;
+  max-width: 200px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--border-gothic);
   border-radius: 10px;
-  padding: 16px;
+  padding: 16px 12px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-}
-
-.forge-recipe-card.affordable {
-  border-color: #f59e0b;
-}
-
-.recipe-icon {
-  font-size: 28px;
-  margin-bottom: 6px;
-}
-
-.forge-recipe-card h3 {
-  font-size: 14px;
-  margin-bottom: 6px;
-}
-
-.forge-recipe-card p {
-  font-size: 12px;
-  color: var(--text-muted);
-  line-height: 1.4;
-  margin-bottom: 12px;
-}
-
-.btn-craft-recipe {
-  background: #f59e0b;
-  border: none;
-  color: #000000;
-  font-weight: 900;
-  padding: 8px;
-  border-radius: 6px;
-  font-size: 12px;
+  align-items: center;
+  text-align: center;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
-.btn-craft-recipe:disabled {
-  background: rgba(255, 255, 255, 0.1);
-  color: #64748b;
+.forge-recipe-card.affordable:hover {
+  border-color: #ffd700;
+  transform: translateY(-4px);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+
+.forge-recipe-card.locked {
+  opacity: 0.5;
+  filter: grayscale(0.8);
   cursor: not-allowed;
 }
 
-.btn-close-forge,
-.btn-return-hub {
-  background: #3b82f6;
-  border: none;
-  color: #ffffff;
+.recipe-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.recipe-name {
+  font-size: 14px;
   font-weight: 800;
-  padding: 12px 28px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
+  color: #ffd700;
+  margin-bottom: 6px;
 }
 
-/* REVIVE & GAME OVER */
+.recipe-desc {
+  font-size: 11px;
+  color: #a8a29e;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  flex: 1;
+}
+
+.recipe-cost {
+  font-size: 12px;
+  font-weight: 900;
+  color: #ff2a55;
+  background: rgba(255, 42, 85, 0.15);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
 .revive-icon {
-  font-size: 48px;
-  margin-bottom: 10px;
+  font-size: 54px;
+  margin-bottom: 14px;
+  animation: pulseSkull 1.6s infinite ease-in-out;
 }
 
-.revive-box h2 {
+@keyframes pulseSkull {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 42, 85, 0.5)); }
+  50% { transform: scale(1.1); filter: drop-shadow(0 0 25px rgba(255, 42, 85, 0.9)); }
+}
+
+.diablo-revive-box h2 {
   font-size: 22px;
-  color: #ef4444;
-  margin-bottom: 10px;
+  color: #ff2a55;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
 }
 
-.revive-box p {
+.diablo-revive-box p {
   font-size: 14px;
-  color: var(--text-muted);
+  color: #e2e8f0;
+  line-height: 1.5;
   margin-bottom: 24px;
-  line-height: 1.6;
 }
 
 .btn-watch-revive {
   width: 100%;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  border: 2px solid #34d399;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 900;
-  padding: 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .btn-give-up {
   background: transparent;
-  border: 1px solid #475569;
-  color: #94a3b8;
-  padding: 10px 20px;
+  border: 1px solid #78716c;
+  color: #a8a29e;
+  font-size: 12px;
+  padding: 10px 18px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.btn-give-up:hover {
+  color: #ef4444;
+  border-color: #ef4444;
 }
 
 .defeat-title {
-  color: #ef4444;
   font-size: 24px;
+  color: #ff1744;
   margin-bottom: 18px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(255, 23, 68, 0.6);
 }
 
 .victory-title {
+  font-size: 26px;
   color: #ffd700;
-  font-size: 24px;
-  margin-bottom: 18px;
-  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+  margin-bottom: 6px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
 }
 
-.run-stats-card {
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
-  padding: 16px;
+.victory-sub {
+  font-size: 13px;
+  color: #cbd5e1;
+  margin-bottom: 20px;
+}
+
+.diablo-stats-card {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--border-gothic);
+  border-radius: 8px;
+  padding: 16px 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  font-size: 14px;
+  margin-bottom: 22px;
   text-align: left;
-  margin-bottom: 24px;
 }
 
-.run-stats-card div {
+.diablo-stats-card div {
   display: flex;
   justify-content: space-between;
+  font-size: 14px;
+  color: #d6d3d1;
+}
+
+.diablo-stats-card strong {
+  color: #ffd700;
 }
 
 .btn-double-rewards {
   width: 100%;
-  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-  border: 2px solid #f59e0b;
+  margin-bottom: 14px;
+}
+
+.btn-return-hub {
+  width: 100%;
+}
+
+.pause-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.diablo-btn {
+  background: linear-gradient(180deg, #78350f 0%, #451a03 100%);
+  border: 2px solid var(--gold-dark);
+  color: #ffd700;
+  font-weight: 900;
+  font-size: 14px;
+  padding: 12px 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  transition: all 0.2s;
+}
+
+.diablo-btn:hover {
+  filter: brightness(1.2);
+  transform: translateY(-1px);
+}
+
+.diablo-btn-gold {
+  background: linear-gradient(180deg, #d97706 0%, #92400e 100%);
+  border: 2px solid #ffd700;
   color: #ffffff;
   font-weight: 900;
-  padding: 14px;
-  border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
+  padding: 14px 28px;
+  border-radius: 6px;
   cursor: pointer;
-  margin-bottom: 14px;
-  box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+  transition: all 0.2s;
+}
+
+.diablo-btn-gold:hover {
+  filter: brightness(1.2);
+  transform: translateY(-1px);
+}
+
+.diablo-btn-alt {
+  background: transparent;
+  border: 1px solid #78716c;
+  color: #d6d3d1;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.diablo-banner {
+  position: fixed;
+  top: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 5, 8, 0.95);
+  border: 2px solid #ff1744;
+  border-radius: 8px;
+  padding: 18px 36px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(255, 23, 68, 0.6);
+  z-index: 9999;
+  animation: fadeInDown 0.4s ease-out;
+}
+
+.diablo-banner h2 {
+  font-size: 24px;
+  color: #ff1744;
+  margin-bottom: 4px;
+  letter-spacing: 2px;
+}
+
+.diablo-banner em {
+  font-size: 14px;
+  color: #ffd700;
 }
 
 /* ==========================================================
-   RESPONSIVIDADE MULTIPLATAFORMA (DESKTOP & MOBILE)
+   RESPONSIVIDADE MOBILE
    ========================================================== */
 @media (max-width: 768px) {
-  .hub-top-bar {
-    padding: 10px 14px;
-    flex-wrap: wrap;
-    gap: 8px;
+  .diablo-globe-container {
+    width: 80px;
+    height: 80px;
   }
-  .hub-title {
-    font-size: 16px;
+  .globe-glass {
+    width: 70px;
+    height: 70px;
   }
-  .hub-subtitle {
-    display: none;
-  }
-  .hub-resources {
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .res-badge {
-    padding: 4px 10px;
-    font-size: 12px;
-  }
-  .hub-nav-bar {
-    padding: 8px 14px;
-  }
-  .hub-main-panel {
-    padding: 14px;
-  }
-  .zones-play-bar {
-    flex-direction: column;
-    gap: 14px;
-    align-items: stretch;
-  }
-
-  /* HUD em Batalha - Separação Ergonômica de Controles */
-  .game-hud-overlay {
-    padding: 10px 14px;
-  }
-  .hud-top {
-    gap: 8px;
-    align-items: center;
-  }
-  .hud-hero-health {
-    width: 130px;
-  }
-  .health-bar-frame {
-    height: 18px;
-  }
-  .health-bar-text {
+  .globe-text {
     font-size: 10px;
   }
-  .hud-wave-center {
-    padding: 4px 12px;
+  .diablo-action-slot {
+    width: 46px;
+    height: 46px;
   }
-  .hud-wave-title {
-    font-size: 11px;
+  .slot-icon {
+    font-size: 16px;
   }
-  .hud-wave-timer {
-    font-size: 14px;
-  }
-  .hud-resources-top {
-    gap: 6px;
-  }
-  .hud-blood-badge {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
-  .btn-inrun-forge {
-    padding: 6px 12px;
-    font-size: 11px;
-  }
-  .btn-hud-pause {
+  .diablo-action-bar-frame {
     padding: 6px 10px;
-    font-size: 13px;
-  }
-
-  /* Joystick à Esquerda, Habilidades à Direita (Sem Sobreposição) */
-  .hud-joystick-zone {
-    bottom: 18px;
-    left: 18px;
-    width: 120px;
-    height: 120px;
-  }
-  .joystick-base {
-    width: 95px;
-    height: 95px;
-  }
-  .joystick-stick {
-    width: 38px;
-    height: 38px;
-  }
-
-  .hud-skills-bottom {
-    position: absolute;
-    bottom: 18px;
-    right: 18px;
-    gap: 10px;
-  }
-  .skill-btn {
-    width: 48px;
-    height: 48px;
-  }
-  .skill-icon {
-    font-size: 18px;
-  }
-  .skill-key {
-    display: none; /* Em touch / mobile, oculta atalhos de teclado */
-  }
-
-  .hud-boss-bar-wrapper {
-    top: 76px;
-    width: 86%;
-  }
-}
-
-@media (max-width: 480px) {
-  .hud-hero-health {
-    width: 100px;
-  }
-  .hud-top {
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  .btn-inrun-forge {
-    padding: 5px 8px;
-    font-size: 10px;
-  }
-  .hud-boss-bar-wrapper {
-    top: 86px;
-  }
-  .hud-joystick-zone {
-    bottom: 12px;
-    left: 12px;
-    width: 110px;
-    height: 110px;
-  }
-  .joystick-base {
-    width: 86px;
-    height: 86px;
-  }
-  .joystick-stick {
-    width: 34px;
-    height: 34px;
-  }
-  .hud-skills-bottom {
-    bottom: 12px;
-    right: 12px;
-    gap: 8px;
-  }
-  .skill-btn {
-    width: 44px;
-    height: 44px;
-  }
-  .skill-icon {
-    font-size: 16px;
-  }
-}
-
-/* Telas Horizontais Baixas (Mobile Landscape / 16:9 CrazyGames iframe) */
-@media (max-height: 520px) {
-  .inrun-forge-box,
-  .revive-box,
-  .gameover-box,
-  .pause-box {
-    padding: 14px 18px;
-    max-height: 94vh;
-  }
-  .forge-cards-row {
-    margin-bottom: 10px;
-    gap: 8px;
-  }
-  .forge-recipe-card {
-    padding: 10px;
-  }
-  .run-stats-card {
-    margin-bottom: 12px;
-    padding: 8px 12px;
-    gap: 6px;
-  }
-  .hud-boss-bar-wrapper {
-    top: 60px;
-  }
-  .hud-joystick-zone {
-    bottom: 10px;
-    left: 14px;
-    width: 100px;
-    height: 100px;
-  }
-  .joystick-base {
-    width: 82px;
-    height: 82px;
-  }
-  .joystick-stick {
-    width: 32px;
-    height: 32px;
-  }
-  .hud-skills-bottom {
-    bottom: 10px;
-    right: 14px;
-    gap: 8px;
-  }
-  .skill-btn {
-    width: 42px;
-    height: 42px;
-  }
-  .skill-icon {
-    font-size: 15px;
   }
 }

@@ -41,6 +41,7 @@ export const BESTIARY = {
   },
   magma_imp: {
     id: 'magma_imp',
+    name: 'Diabrete de Magma',
     category: 'Demônio',
     icon: '🔥',
     lore: 'Nascidos no calor escaldante da Forja Infernal. Seu corpo é rocha em fusão capaz de explodir ao morrer.',
