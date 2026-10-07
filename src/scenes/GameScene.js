@@ -33,6 +33,8 @@ export class GameScene extends Phaser.Scene {
     this.isVictory = false;
     this.reviveUsed = false;
     this.invulnerableTimer = 0;
+    this.playerHurtCooldown = 0;
+    this.isPaused = false;
 
     // Recursos da corrida
     this.runBlood = 0;
@@ -64,6 +66,16 @@ export class GameScene extends Phaser.Scene {
     this.enemyProjectiles = this.physics.add.group();
     this.bloodDrops = this.physics.add.group();
     this.floatingTexts = this.add.group();
+
+    // Colisão centralizada e sem vazamento de memória para todos os projéteis
+    this.physics.add.overlap(this.projectiles, this.enemies, (proj, enemy) => {
+      if (!proj.active || !enemy.active || enemy.hp <= 0) return;
+      this.applyDamageToEnemy(enemy, proj.damageValue, proj.isCrit);
+      if (proj.hasLightning && Math.random() < 0.3) {
+        this.procLightning(enemy);
+      }
+      proj.destroy();
+    });
 
     // Criação do Jogador
     this.createPlayer();
@@ -218,7 +230,7 @@ export class GameScene extends Phaser.Scene {
     // 1. Movimentação do Jogador
     this.handlePlayerMovement(dt);
 
-    // 2. Invulnerabilidade
+    // 2. Invulnerabilidade & I-Frames
     if (this.invulnerableTimer > 0) {
       this.invulnerableTimer -= dt;
       this.invulnAura.clear();
@@ -228,6 +240,9 @@ export class GameScene extends Phaser.Scene {
       if (this.invulnerableTimer <= 0) {
         this.invulnAura.setVisible(false);
       }
+    }
+    if (this.playerHurtCooldown > 0) {
+      this.playerHurtCooldown -= dt;
     }
 
     // 3. Atualização do Pet Arcano
@@ -474,21 +489,15 @@ export class GameScene extends Phaser.Scene {
 
     const dmg = this.player.damage * this.player.damageMult;
     const isCrit = Math.random() < this.player.critChance;
-    const finalDmg = isCrit ? dmg * this.player.critDamage : dmg;
+    proj.damageValue = isCrit ? dmg * this.player.critDamage : dmg;
+    proj.isCrit = isCrit;
+    proj.hasLightning = this.player.hasLightningProc;
+
+    this.projectiles.add(proj);
 
     // Destrói após 1.4s
     this.time.delayedCall(1400, () => {
       if (proj.active) proj.destroy();
-    });
-
-    // Colisão com inimigos
-    this.physics.add.overlap(proj, this.enemies, (p, enemy) => {
-      if (!enemy.active || enemy.hp <= 0) return;
-      this.applyDamageToEnemy(enemy, finalDmg, isCrit);
-      if (this.player.hasLightningProc && Math.random() < 0.3) {
-        this.procLightning(enemy);
-      }
-      p.destroy();
     });
   }
 
@@ -505,13 +514,13 @@ export class GameScene extends Phaser.Scene {
     blade.rotation = angle;
     blade.body.setVelocity(Math.cos(angle) * 420, Math.sin(angle) * 420);
 
-    this.time.delayedCall(1200, () => { if (blade.active) blade.destroy(); });
+    blade.damageValue = damage * this.player.damageMult;
+    blade.isCrit = false;
+    blade.hasLightning = false;
 
-    this.physics.add.overlap(blade, this.enemies, (b, enemy) => {
-      if (!enemy.active || enemy.hp <= 0) return;
-      this.applyDamageToEnemy(enemy, damage * this.player.damageMult);
-      b.destroy();
-    });
+    this.projectiles.add(blade);
+
+    this.time.delayedCall(1200, () => { if (blade.active) blade.destroy(); });
   }
 
   spawnPetProjectile(x, y, target, damage) {
@@ -519,19 +528,20 @@ export class GameScene extends Phaser.Scene {
     const feather = this.add.graphics({ depth: 20 });
     this.physics.world.enable(feather);
     feather.body.setSize(10, 10);
+    feather.body.setOffset(-5, -5);
     feather.fillStyle(0x38bdf8, 1);
     feather.fillCircle(0, 0, 5);
     feather.x = x;
     feather.y = y;
     feather.body.setVelocity(Math.cos(angle) * 520, Math.sin(angle) * 520);
 
-    this.time.delayedCall(1000, () => { if (feather.active) feather.destroy(); });
+    feather.damageValue = damage;
+    feather.isCrit = false;
+    feather.hasLightning = false;
 
-    this.physics.add.overlap(feather, this.enemies, (f, enemy) => {
-      if (!enemy.active || enemy.hp <= 0) return;
-      this.applyDamageToEnemy(enemy, damage);
-      f.destroy();
-    });
+    this.projectiles.add(feather);
+
+    this.time.delayedCall(1000, () => { if (feather.active) feather.destroy(); });
   }
 
   procLightning(target) {
@@ -569,11 +579,13 @@ export class GameScene extends Phaser.Scene {
       this.player.hp = Math.min(this.player.maxHp, this.player.hp + heal);
     }
 
-    // Feedback visual (flash branco)
-    enemy.setTintFill(0xffffff);
-    this.time.delayedCall(70, () => {
-      if (enemy.active) enemy.clearTint();
-    });
+    // Feedback visual (flash de transparência no container seguro contra crashes)
+    if (enemy.active) {
+      enemy.setAlpha(0.35);
+      this.time.delayedCall(70, () => {
+        if (enemy.active) enemy.setAlpha(1.0);
+      });
+    }
 
     if (enemy.hp <= 0) {
       this.onEnemyKilled(enemy);
@@ -712,14 +724,15 @@ export class GameScene extends Phaser.Scene {
     const pool = this.zoneData.enemies;
     const mobDef = pool[Math.floor(Math.random() * pool.length)];
 
-    // Spawn fora da tela mas perto do herói
+    // Spawn fora da tela mas perto do herói (sempre contido na arena 2400x2400)
     const angle = Math.random() * Math.PI * 2;
     const dist = 480 + Math.random() * 80;
-    const sx = this.player.x + Math.cos(angle) * dist;
-    const sy = this.player.y + Math.sin(angle) * dist;
+    const sx = Phaser.Math.Clamp(this.player.x + Math.cos(angle) * dist, 60, 2340);
+    const sy = Phaser.Math.Clamp(this.player.y + Math.sin(angle) * dist, 60, 2340);
 
     const enemy = this.add.container(sx, sy);
     this.physics.world.enable(enemy);
+    enemy.body.setCollideWorldBounds(true);
     enemy.body.setSize(mobDef.radius * 2, mobDef.radius * 2);
     enemy.body.setOffset(-mobDef.radius, -mobDef.radius);
 
@@ -748,11 +761,12 @@ export class GameScene extends Phaser.Scene {
 
     const bDef = this.zoneData.boss;
     const angle = Math.random() * Math.PI * 2;
-    const bx = this.player.x + Math.cos(angle) * 350;
-    const by = this.player.y + Math.sin(angle) * 350;
+    const bx = Phaser.Math.Clamp(this.player.x + Math.cos(angle) * 350, 100, 2300);
+    const by = Phaser.Math.Clamp(this.player.y + Math.sin(angle) * 350, 100, 2300);
 
     const boss = this.add.container(bx, by);
     this.physics.world.enable(boss);
+    boss.body.setCollideWorldBounds(true);
     boss.body.setSize(bDef.radius * 2, bDef.radius * 2);
     boss.body.setOffset(-bDef.radius, -bDef.radius);
 
@@ -810,10 +824,10 @@ export class GameScene extends Phaser.Scene {
       const angle = Phaser.Math.Angle.Between(e.x, e.y, this.player.x, this.player.y);
       e.body.setVelocity(Math.cos(angle) * e.speed, Math.sin(angle) * e.speed);
 
-      // Ataque de contato ao herói
+      // Ataque de contato ao herói com i-frames justos e sem repetição a cada frame
       const dist = Phaser.Math.Distance.Between(e.x, e.y, this.player.x, this.player.y);
-      if (dist < 28) {
-        this.hitPlayer(e.dmg * dt);
+      if (dist < 28 && this.playerHurtCooldown <= 0 && this.invulnerableTimer <= 0) {
+        this.hitPlayer(e.dmg);
       }
 
       // Se for o Boss, executa padrões telegrafados
@@ -857,15 +871,26 @@ export class GameScene extends Phaser.Scene {
   }
 
   hitPlayer(amount) {
-    if (this.invulnerableTimer > 0) return;
+    if (this.invulnerableTimer > 0 || this.playerHurtCooldown > 0) return;
 
-    // Redução por armadura
+    this.playerHurtCooldown = 0.45; // 450ms de i-frames para gameplay fluido
+
+    // Redução de dano por armadura clássica ARPG
     const reduction = this.player.armor / (this.player.armor + 50);
-    const effectiveDmg = Math.max(1, amount * (1 - reduction));
+    const effectiveDmg = Math.max(1, Math.round(amount * (1 - reduction)));
 
     this.player.hp -= effectiveDmg;
     audio.playPlayerHurt();
     this.cameras.main.shake(120, 0.008);
+
+    // Feedback visual suave de dano no herói
+    this.tweens.add({
+      targets: this.player,
+      alpha: 0.35,
+      duration: 100,
+      yoyo: true,
+      repeat: 1
+    });
 
     if (this.player.hp <= 0) {
       this.player.hp = 0;
@@ -921,8 +946,11 @@ export class GameScene extends Phaser.Scene {
           <div class="hud-blood-badge">
             <span>🩸</span> <strong id="hud-blood-count">0</strong>
           </div>
-          <button class="btn-inrun-forge" id="btn-hud-forge" title="Pressione F ou clique">
+          <button class="btn-inrun-forge" id="btn-hud-forge" title="Pressione F ou toque para Forjar">
             🔥 FORJA (F)
+          </button>
+          <button class="btn-hud-pause" id="btn-hud-pause" title="Pausar Batalha (ESC)">
+            ⏸️
           </button>
         </div>
       </div>
@@ -932,6 +960,13 @@ export class GameScene extends Phaser.Scene {
         <div class="boss-bar-title" id="hud-boss-name">NOME DO CHEFE</div>
         <div class="boss-bar-frame">
           <div class="boss-bar-fill" id="hud-boss-fill" style="width:100%"></div>
+        </div>
+      </div>
+
+      <!-- Virtual Joystick para Mobile / Touchscreen -->
+      <div class="hud-joystick-zone" id="hud-joystick-zone">
+        <div class="joystick-base" id="joystick-base">
+          <div class="joystick-stick" id="joystick-stick"></div>
         </div>
       </div>
 
@@ -959,9 +994,64 @@ export class GameScene extends Phaser.Scene {
 
     // Eventos de clique para mobile / mouse
     document.getElementById('btn-hud-forge').onclick = () => this.openInRunForgeModal();
+    document.getElementById('btn-hud-pause').onclick = () => this.togglePause();
     document.getElementById('hud-btn-dash').onclick = () => { if (this.dashCooldown <= 0) this.triggerDash(); };
     document.getElementById('hud-btn-active').onclick = () => { if (this.activeSkillCooldown <= 0) this.triggerActiveSkill(); };
     document.getElementById('hud-btn-ult').onclick = () => { if (this.ultimateSkillCooldown <= 0) this.triggerUltimateSkill(); };
+
+    this.setupVirtualJoystick();
+  }
+
+  setupVirtualJoystick() {
+    const zone = document.getElementById('hud-joystick-zone');
+    const stick = document.getElementById('joystick-stick');
+    if (!zone || !stick) return;
+
+    let touching = false;
+    let centerX = 0;
+    let centerY = 0;
+    const maxDist = 42;
+
+    const updateTouch = (clientX, clientY) => {
+      const dx = clientX - centerX;
+      const dy = clientY - centerY;
+      const dist = Math.hypot(dx, dy);
+      const clampedDist = Math.min(maxDist, dist);
+      const angle = Math.atan2(dy, dx);
+
+      const stickX = Math.cos(angle) * clampedDist;
+      const stickY = Math.sin(angle) * clampedDist;
+      stick.style.transform = `translate(${stickX}px, ${stickY}px)`;
+
+      this.virtualJoy = {
+        active: dist > 5,
+        x: clampedDist > 0 ? (stickX / maxDist) : 0,
+        y: clampedDist > 0 ? (stickY / maxDist) : 0
+      };
+    };
+
+    const resetJoy = () => {
+      touching = false;
+      stick.style.transform = 'translate(0px, 0px)';
+      this.virtualJoy = { active: false, x: 0, y: 0 };
+    };
+
+    zone.addEventListener('pointerdown', (e) => {
+      touching = true;
+      const rect = zone.getBoundingClientRect();
+      centerX = rect.left + rect.width / 2;
+      centerY = rect.top + rect.height / 2;
+      zone.setPointerCapture(e.pointerId);
+      updateTouch(e.clientX, e.clientY);
+    });
+
+    zone.addEventListener('pointermove', (e) => {
+      if (!touching) return;
+      updateTouch(e.clientX, e.clientY);
+    });
+
+    zone.addEventListener('pointerup', resetJoy);
+    zone.addEventListener('pointercancel', resetJoy);
   }
 
   updateHUD() {
@@ -1013,11 +1103,80 @@ export class GameScene extends Phaser.Scene {
   }
 
   // ==========================================
+  // PAUSE DO JOGO (ESC / BOTÃO HUD)
+  // ==========================================
+  togglePause() {
+    if (this.isGameOver || this.isVictory) return;
+    if (this.forgeModalOpen) return;
+
+    this.isPaused = !this.isPaused;
+    if (this.isPaused) {
+      this.physics.pause();
+      crazyGames.gameplayStop();
+      this.showPauseModal();
+    } else {
+      this.physics.resume();
+      crazyGames.gameplayStart();
+      this.closePauseModal();
+    }
+  }
+
+  showPauseModal() {
+    if (this.pauseModal) return;
+    const modal = document.createElement('div');
+    modal.className = 'pause-modal-overlay';
+    modal.innerHTML = `
+      <div class="pause-box">
+        <h2>⏸️ BATALHA EM PAUSA</h2>
+        <p>A Forja Sagrada aguarda sua ordem para retomar o combate sangrento.</p>
+        <div class="pause-actions">
+          <button class="btn-pause-resume" id="btn-pause-resume">RETOMAR BATALHA ➔</button>
+          <button class="btn-pause-mute" id="btn-pause-mute">${audio.muted ? '🔊 ATIVAR SOM' : '🔇 MUTAR SOM'}</button>
+          <button class="btn-pause-quit" id="btn-pause-quit">ABANDONAR E VOLTAR AO HUB</button>
+        </div>
+      </div>
+    `;
+
+    modal.querySelector('#btn-pause-resume').onclick = () => {
+      audio.playButtonClick();
+      this.togglePause();
+    };
+
+    const muteBtn = modal.querySelector('#btn-pause-mute');
+    muteBtn.onclick = () => {
+      audio.setMuted(!audio.muted);
+      muteBtn.textContent = audio.muted ? '🔊 ATIVAR SOM' : '🔇 MUTAR SOM';
+      audio.playButtonClick();
+    };
+
+    modal.querySelector('#btn-pause-quit').onclick = () => {
+      audio.playButtonClick();
+      modal.remove();
+      this.pauseModal = null;
+      this.cleanupAndExit();
+    };
+
+    document.body.appendChild(modal);
+    this.pauseModal = modal;
+  }
+
+  closePauseModal() {
+    if (this.pauseModal) {
+      this.pauseModal.remove();
+      this.pauseModal = null;
+    }
+  }
+
+  // ==========================================
   // FORJA EM TEMPO REAL (IN-RUN MODAL)
   // ==========================================
   openInRunForgeModal() {
-    if (this.forgeModalOpen) return;
+    if (this.forgeModalOpen || this.isGameOver || this.isVictory) return;
+    if (this.isPaused) return;
+
     this.forgeModalOpen = true;
+    this.physics.pause();
+    crazyGames.gameplayStop();
     audio.playForgeHammer();
 
     const recipes = this.forgeManager.getRandomRecipes(3);
@@ -1053,6 +1212,8 @@ export class GameScene extends Phaser.Scene {
           this.runBlood -= rec.cost;
           modal.remove();
           this.forgeModalOpen = false;
+          this.physics.resume();
+          crazyGames.gameplayStart();
         }
       };
 
@@ -1063,6 +1224,8 @@ export class GameScene extends Phaser.Scene {
       audio.playButtonClick();
       modal.remove();
       this.forgeModalOpen = false;
+      this.physics.resume();
+      crazyGames.gameplayStart();
     };
 
     document.body.appendChild(modal);
@@ -1184,6 +1347,7 @@ export class GameScene extends Phaser.Scene {
   onBossDefeated() {
     this.isVictory = true;
     crazyGames.gameplayStop();
+    crazyGames.showMidgameAd();
     audio.playLevelUp();
 
     // Adiciona recompensas
@@ -1232,9 +1396,22 @@ export class GameScene extends Phaser.Scene {
   }
 
   cleanupAndExit() {
+    this.isGameOver = true;
+    this.closePauseModal();
+
+    // Remove todos os modais e overlays da arena do DOM
+    document.querySelectorAll('.game-hud-overlay, .inrun-forge-modal-overlay, .revive-modal-overlay, .gameover-modal-overlay, .pause-modal-overlay, .boss-arrival-banner').forEach(el => el.remove());
+
     if (this.hudContainer) {
       this.hudContainer.remove();
+      this.hudContainer = null;
     }
+
+    if (this.pet) {
+      this.pet.destroy();
+      this.pet = null;
+    }
+
     audio.stopBgm();
     window.dispatchEvent(new CustomEvent('return_to_hub'));
   }

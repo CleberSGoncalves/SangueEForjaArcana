@@ -72,12 +72,14 @@ export class ArcanePet {
   }
 
   tryAttackNearestEnemy() {
-    if (!this.scene.enemies || this.scene.enemies.length === 0) return;
+    if (!this.scene.enemies) return;
+    const enemyList = this.scene.enemies.getChildren();
+    if (!enemyList || enemyList.length === 0) return;
 
     let nearest = null;
     let minDist = 350;
 
-    for (const enemy of this.scene.enemies) {
+    for (const enemy of enemyList) {
       if (!enemy.active || enemy.hp <= 0) continue;
       const dist = Phaser.Math.Distance.Between(this.x, this.y, enemy.x, enemy.y);
       if (dist < minDist) {
