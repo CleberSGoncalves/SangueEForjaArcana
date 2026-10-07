@@ -1,7 +1,10 @@
 @echo off
 chcp 65001 >nul
 cd /d "%~dp0"
-echo [*] Compilando Sangue e Forja Arcana via Vite...
-npm run build
-echo [✓] Build concluido!
-pause
+call "scripts\build_projeto.bat"
+if %ERRORLEVEL% NEQ 0 (
+    echo [X] Falha no build.
+    if "%1"=="" pause
+    exit /b %ERRORLEVEL%
+)
+if "%1"=="" pause

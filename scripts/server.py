@@ -14,21 +14,31 @@ import uvicorn
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DIST_DIR = ROOT_DIR / "dist"
+PUBLIC_DIR = ROOT_DIR / "public"
 START_TIME = time.time()
 PORT = 8096
 
 app = FastAPI(title="Sangue e Forja Arcana - Production Server")
 
+def get_static_dir():
+    if (DIST_DIR / "index.html").exists():
+        return DIST_DIR
+    if (PUBLIC_DIR / "index.html").exists():
+        return PUBLIC_DIR
+    return DIST_DIR
+
 @app.get("/api/health")
 async def health_check():
     uptime = int(time.time() - START_TIME)
     dist_ready = (DIST_DIR / "index.html").exists()
+    public_ready = (PUBLIC_DIR / "index.html").exists()
     return JSONResponse({
         "status": "online",
         "game": "Sangue e Forja Arcana",
         "genre": "ARPG-Survivors / Bullet Heaven",
         "port": PORT,
         "dist_ready": dist_ready,
+        "public_ready": public_ready,
         "uptime_seconds": uptime,
         "domain": "https://sangueeforjaarcana.kinomuse.com.br"
     })
@@ -36,7 +46,8 @@ async def health_check():
 # Rota principal para fallback do SPA / Jogo HTML5
 @app.get("/")
 async def serve_index():
-    index_file = DIST_DIR / "index.html"
+    static_dir = get_static_dir()
+    index_file = static_dir / "index.html"
     if index_file.exists():
         return FileResponse(index_file)
     return JSONResponse({
@@ -44,9 +55,10 @@ async def serve_index():
         "message": "Sangue e Forja Arcana está em compilação. Execute build_projeto.bat para compilar os ativos."
     })
 
-# Monta diretório estático se existir
-if DIST_DIR.exists():
-    app.mount("/", StaticFiles(directory=str(DIST_DIR), html=True), name="static")
+# Monta diretório estático
+serve_dir = get_static_dir()
+if serve_dir.exists():
+    app.mount("/", StaticFiles(directory=str(serve_dir), html=True), name="static")
 
 def run():
     uvicorn.run(app, host="127.0.0.1", port=PORT, log_level="warning", access_log=False)
