@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bloodGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff1a40"/>
+      <stop offset="100%" stop-color="#700010"/>
+    </linearGradient>
+    <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffd700"/>
+      <stop offset="100%" stop-color="#b8860b"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#09050d"/>
+  <!-- Anvil and Blood Flame -->
+  <path d="M14 44 h36 l-4 8 H18 z" fill="#3a3042" stroke="#b8860b" stroke-width="2"/>
+  <path d="M22 36 h20 l4 8 H18 z" fill="#4f425b"/>
+  <!-- Flame Drop -->
+  <path d="M32 10 C32 10 20 26 20 34 C20 40 25 44 32 44 C39 44 44 40 44 34 C44 26 32 10 32 10 Z" fill="url(#bloodGrad)" stroke="#ff4757" stroke-width="1.5"/>
+  <circle cx="32" cy="34" r="5" fill="#ffd700" opacity="0.8"/>
+</svg>
